@@ -346,7 +346,8 @@ def main() -> int:
         return 0
 
     intents = discord.Intents.default()
-    intents.message_content = True
+    # Slash commands do not need access to ordinary message contents.
+    intents.message_content = False
     bot = commands.Bot(
         command_prefix=commands.when_mentioned,
         intents=intents,

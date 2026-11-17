@@ -41,6 +41,32 @@ python -m venv .venv
 .venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
+## Discord 봇 생성·초대
+
+사용자가 자기 PC에서 자기 Discord 봇 계정과 설정으로 실행하는 방식입니다. 각 사용자는 자기 봇을 만들고 자기 서버로 초대합니다.
+
+1. [Discord Developer Portal](https://discord.com/developers/applications)에서 애플리케이션을 만들고 Bot 페이지에서 봇 토큰을 준비합니다. 토큰은 자기 PC의 `.env`에만 저장합니다.
+2. General Information의 Application ID를 확인합니다. Application ID와 봇 토큰은 서로 다른 값입니다.
+3. Installation에서 Guild Install을 사용하고, OAuth2 URL Generator에서 `bot`, `applications.commands`를 선택합니다. 채널 보기·메시지 보내기·링크 임베드 권한만 요청하며 관리자 권한은 필요하지 않습니다. 메시지 본문 접근용 Message Content Intent도 필요하지 않습니다.
+4. 생성한 링크로 봇을 자기 서버에 추가합니다. 아래 형식에서 `YOUR_APPLICATION_ID`를 자기 앱 ID로 바꿔 사용해도 됩니다.
+
+```text
+https://discord.com/oauth2/authorize?client_id=YOUR_APPLICATION_ID&scope=bot%20applications.commands&permissions=19456&integration_type=0
+```
+
+5. Discord의 개발자 모드를 켜고 자기 사용자 ID와 명령을 사용할 채널 ID를 복사해 `.env`의 허용 목록에 설정합니다.
+6. 자동 알림이 필요하면 알림을 받을 채널의 웹훅을 만들고 `DISCORD_USAGE_WEBHOOK_URL`에 설정합니다. 작업 알림을 별도 채널로 받으려면 `DISCORD_WORK_WEBHOOK_URL`도 설정합니다.
+
+OAuth2 설치 절차는 [Discord 공식 문서](https://docs.discord.com/developers/topics/oauth2)를 참고하세요.
+
+## 다른 서버·사용자의 데이터와의 관계
+
+- 실행 중인 PC의 로컬 로그만 집계합니다. 다른 사람이 이 저장소를 받아 자기 PC에서 자기 봇으로 실행하면 그 사람 PC의 로그를 처리합니다.
+- 명령 응답은 허용 목록에 있는 요청자에게만 보입니다. 자동 알림은 `.env`에 설정한 웹훅 채널에 보내며, 봇을 초대한 서버의 모든 채널로 자동 전송하지 않습니다.
+- 같은 봇 계정은 연결된 PC의 로그를 처리합니다. 다른 사람이 자기 정보를 확인하려면 자기 봇 토큰과 자기 PC의 실행 환경을 사용해야 합니다.
+- 봇 초대 링크는 서버 설치용입니다. 알림을 받을 채널은 별도의 웹훅 설정으로 정합니다. [Discord 웹훅 문서](https://docs.discord.com/developers/resources/webhook)
+- 공개 저장소에는 봇 토큰·실제 웹훅·개인 로그가 포함되지 않습니다.
+
 ## .env 설정
 
 ```bat
